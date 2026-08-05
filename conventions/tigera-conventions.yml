@@ -1,0 +1,145 @@
+generated: '2026-08-05'
+method: derived
+source: >-
+  openapi/tigera-calico-api-openapi-original.json (parameter inventory across 261 operations)
+  plus https://docs.tigera.io/calico/latest/reference/ for the documented semantics
+description: >-
+  Cross-cutting request/response semantics for the Calico API. Because the API is a Kubernetes
+  aggregated API server, its conventions are the Kubernetes API machinery conventions — which
+  means they are unusually well specified and unusually different from a typical SaaS REST API.
+  Idempotency is not an Idempotency-Key header; it is declarative apply plus resourceVersion
+  preconditions. Pagination is limit + continue cursors. There is no request-id header and no
+  vendor rate-limit header. Every claim below is grounded in a parameter or schema that appears
+  in the published spec.
+base_url: https://kubernetes.default.svc/apis/projectcalico.org/v3
+api_style: >-
+  Kubernetes REST — resource-oriented paths, JSON or YAML request/response bodies, list/watch
+  streaming, declarative apply.
+authentication:
+  scheme: >-
+    Delegated to the host cluster's kube-apiserver — bearer token (ServiceAccount or OIDC) or
+    client certificate; etcdv3 mode uses direct etcd credentials.
+  declared_in_spec: false
+  detail: authentication/tigera-authentication.yml
+idempotency:
+  supported: true
+  mechanism: >-
+    Declarative writes, not an idempotency key. Three spec-backed mechanisms compose into the
+    idempotency contract.
+  mechanisms:
+  - name: Server-side apply
+    detail: >-
+      PATCH with Content-Type application/apply-patch+yaml and a `fieldManager` identity. Applying
+      the same manifest with the same fieldManager any number of times converges on the same
+      object state, and field ownership is tracked per manager so concurrent appliers do not
+      clobber each other.
+    spec_evidence: >-
+      31 PATCH operations declare consumes application/apply-patch+yaml; `fieldManager` appears
+      on 89 operations; `force` appears on 31.
+  - name: Full replace (PUT)
+    detail: >-
+      replace* operations are idempotent by definition — the same body applied twice yields the
+      same object.
+    spec_evidence: 31 replace* operationIds.
+  - name: resourceVersion precondition
+    detail: >-
+      Optimistic concurrency. A write that carries metadata.resourceVersion is rejected with 409
+      Conflict if the stored object has moved on, which makes an unsafe blind retry impossible
+      rather than silently lossy.
+    spec_evidence: '`resourceVersion` and `resourceVersionMatch` parameters on 112 operations.'
+  dry_run:
+    supported: true
+    parameter: dryRun
+    values: ['All']
+    spec_evidence: '`dryRun` appears on all 139 write operations.'
+    detail: >-
+      Every create/update/delete can be executed for validation only. This is the single most
+      useful safety primitive for an agent driving this API: validate, then commit.
+  key_header: null
+  retention: n/a
+  docs: https://docs.tigera.io/calico/latest/reference/resources/overview
+pagination:
+  style: cursor
+  request_params:
+    limit: Maximum number of items to return in one list response.
+    continue: >-
+      Opaque cursor returned as metadata.continue on the previous page; pass it back to fetch the
+      next chunk. Expires — a stale continue token returns 410 Gone and the list must restart.
+  response_fields:
+    metadata.continue: cursor for the next page, empty when the list is complete
+    metadata.remainingItemCount: server estimate of items not yet returned
+    metadata.resourceVersion: the version the list was consistent at
+  spec_evidence: '`limit` and `continue` parameters on 112 list/watch operations.'
+filtering:
+  label_selector:
+    parameter: labelSelector
+    detail: Kubernetes label selector syntax (equality and set-based).
+  field_selector:
+    parameter: fieldSelector
+    detail: Restrict by object field, e.g. metadata.namespace.
+  spec_evidence: both present on 112 operations
+watch:
+  supported: true
+  mechanism: >-
+    `watch=true` on a list operation upgrades it to a long-lived stream of add/modify/delete
+    events, produced as application/json;stream=watch. `allowWatchBookmarks=true` asks the server
+    to emit periodic BOOKMARK events carrying a resourceVersion so a client can resume cheaply
+    after a disconnect. `timeoutSeconds` bounds the stream.
+  spec_evidence: '`watch` and `allowWatchBookmarks` on 87 operations; 87 operations produce application/json;stream=watch.'
+  detail: >-
+    This is the event surface of the Calico API — an in-cluster streaming change feed, distinct
+    from the Calico Cloud security-event webhooks in asyncapi/.
+content_negotiation:
+  produces: [application/json, application/yaml, 'application/json;stream=watch']
+  patch_media_types:
+  - application/json-patch+json
+  - application/merge-patch+json
+  - application/strategic-merge-patch+json
+  - application/apply-patch+yaml
+  pretty:
+    parameter: pretty
+    detail: 'If true, the output is pretty-printed. Present on 120 operations.'
+deletion:
+  parameters:
+    gracePeriodSeconds: Seconds before the object is deleted; 0 means delete immediately.
+    propagationPolicy: 'Orphan | Background | Foreground — dependent-object handling.'
+    orphanDependents: Deprecated boolean superseded by propagationPolicy.
+  collection_delete: >-
+    deleteProjectcalicoOrgV3Collection* deletes every object matching the selector — a
+    high-blast-radius operation an agent should gate behind a human confirmation.
+metadata:
+  supported: true
+  mechanism: 'Kubernetes metadata.labels and metadata.annotations on every resource.'
+versioning:
+  scheme: api-group-version-in-path
+  current: projectcalico.org/v3
+  mechanism: >-
+    The API group and version are part of the path (/apis/projectcalico.org/v3/…). Discovery is
+    available from the server itself — getAPIVersions, getProjectcalicoOrgAPIGroup and
+    getProjectcalicoOrgV3APIResources return the served groups, versions and resource list.
+  detail: lifecycle/tigera-lifecycle.yml
+error_envelope:
+  format: kubernetes-status
+  media_type: application/json
+  shape: 'meta/v1.Status { status, code, reason, message, details{ causes[], retryAfterSeconds } }'
+  detail: errors/tigera-problem-types.yml
+rate_limiting:
+  vendor_headers: false
+  mechanism: >-
+    None published by Calico. The fronting kube-apiserver applies API Priority and Fairness,
+    which surfaces as 429 with details.retryAfterSeconds in the Status body rather than as
+    X-RateLimit-* headers.
+request_tracing:
+  request_id_header: null
+  note: >-
+    No vendor request-id header is documented. Correlation is done through Kubernetes audit
+    logs (docs.tigera.io/calico-cloud/observability/kube-audit) and, in Calico Cloud, the
+    console audit log.
+gaps:
+- The spec declares no securitySchemes, so auth is invisible to spec-only tooling.
+- The spec declares no 4xx/5xx responses, so failure modes are invisible to spec-only tooling.
+- No published rate-limit signalling of Calico's own.
+x-evidence:
+  fetched: '2026-08-05'
+  source_spec: https://docs.tigera.io/json/calico-api-swagger.json
+  http_status: 200

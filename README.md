@@ -42,5 +42,7 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Tigera is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/tigera_stock/
+Tigera is the creator of Project Calico, the open-source networking and network-security engine for Kubernetes, and the company behind Calico Open Source, Calico Enterprise and Calico Cloud. Its programmable surface is Kubernetes-native: the projectcalico.org/v3 aggregated API server (published as a Swagger 2.0 document), the Goldmane gRPC flow-observability service, calicoctl, and a Calico Cloud SaaS management plane with a read-only Usage API and security-event webhooks.
+
+- https://www.tigera.io/
+- https://docs.tigera.io/

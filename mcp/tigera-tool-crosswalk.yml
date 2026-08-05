@@ -1,0 +1,120 @@
+generated: '2026-08-05'
+method: derived
+source: mcp/tigera-mcp.yml + openapi/tigera-calico-api-openapi-original.json
+description: >-
+  Crosswalk between Tigera's agent-facing MCP surface and its machine-readable REST surface. The
+  headline finding is a full divergence: the two surfaces do not overlap at all. The MCP server
+  lives on the WordPress marketing host (www.tigera.io/wp-json/mcp/mcp-oauth-server) and fronts
+  site content; the published Swagger 2.0 contract describes the Calico aggregated Kubernetes
+  API server that runs inside a customer's own cluster. No MCP tool is backed by a Calico
+  operation, and no Calico operation is exposed as an MCP tool. Recording that divergence is the
+  point of this artifact — an agent that authenticates to the Tigera MCP server gains no ability
+  to read or write network policy.
+surfaces:
+  openapi:
+    file: openapi/tigera-calico-api-openapi-original.json
+    spec: Swagger 2.0
+    published_at: https://docs.tigera.io/json/calico-api-swagger.json
+    gated: false
+    operations: 261
+  mcp:
+    url: https://www.tigera.io/wp-json/mcp/mcp-oauth-server
+    gated: true
+    gate: OAuth 2.1 bearer (scope `mcp`); anonymous tools/list returns 401 mcp_unauthorized
+    tools_enumerated: false
+  graphql:
+    present: false
+    note: No GraphQL endpoint was found on any Tigera or Calico Cloud host.
+crosswalk: []
+mcp_only: []
+rest_only:
+- capability: Network policy
+  operations: 46
+  operation_ids:
+  - listProjectcalicoOrgV3NetworkPolicyForAllNamespaces
+  - createProjectcalicoOrgV3NamespacedNetworkPolicy
+  - readProjectcalicoOrgV3NamespacedNetworkPolicy
+  - replaceProjectcalicoOrgV3NamespacedNetworkPolicy
+  - deleteProjectcalicoOrgV3NamespacedNetworkPolicy
+  - listProjectcalicoOrgV3GlobalNetworkPolicy
+  - createProjectcalicoOrgV3GlobalNetworkPolicy
+  - readProjectcalicoOrgV3GlobalNetworkPolicy
+  - replaceProjectcalicoOrgV3GlobalNetworkPolicy
+  - deleteProjectcalicoOrgV3GlobalNetworkPolicy
+- capability: Staged policy (dry-run / preview policy)
+  operations: 40
+  operation_ids:
+  - listProjectcalicoOrgV3StagedGlobalNetworkPolicy
+  - createProjectcalicoOrgV3NamespacedStagedNetworkPolicy
+  - listProjectcalicoOrgV3StagedKubernetesNetworkPolicyForAllNamespaces
+- capability: Policy tiers
+  operations: 9
+  operation_ids:
+  - listProjectcalicoOrgV3Tier
+  - createProjectcalicoOrgV3Tier
+  - readProjectcalicoOrgV3Tier
+- capability: Network sets and host endpoints
+  operations: 36
+  operation_ids:
+  - listProjectcalicoOrgV3GlobalNetworkSet
+  - listProjectcalicoOrgV3NetworkSetForAllNamespaces
+  - listProjectcalicoOrgV3HostEndpoint
+- capability: BGP and IPAM
+  operations: 27
+  operation_ids:
+  - listProjectcalicoOrgV3BGPConfiguration
+  - listProjectcalicoOrgV3BGPPeer
+  - listProjectcalicoOrgV3IPPool
+- capability: Threat detection, alerts and reports
+  operations: 45
+  operation_ids:
+  - listProjectcalicoOrgV3GlobalAlert
+  - listProjectcalicoOrgV3GlobalAlertTemplate
+  - listProjectcalicoOrgV3GlobalThreatFeed
+  - listProjectcalicoOrgV3GlobalReport
+  - listProjectcalicoOrgV3GlobalReportType
+- capability: Observability (packet capture)
+  operations: 10
+  operation_ids:
+  - listProjectcalicoOrgV3PacketCaptureForAllNamespaces
+  - createProjectcalicoOrgV3NamespacedPacketCapture
+- capability: Cluster and component configuration
+  operations: 43
+  operation_ids:
+  - listProjectcalicoOrgV3ClusterInformation
+  - listProjectcalicoOrgV3FelixConfiguration
+  - listProjectcalicoOrgV3KubeControllersConfiguration
+  - listProjectcalicoOrgV3ManagedCluster
+  - listProjectcalicoOrgV3RemoteClusterConfiguration
+  - listProjectcalicoOrgV3LicenseKey
+- capability: Access review and profiles
+  operations: 11
+  operation_ids:
+  - createProjectcalicoOrgV3AuthenticationReview
+  - createProjectcalicoOrgV3AuthorizationReview
+  - listProjectcalicoOrgV3Profile
+- capability: API discovery (group/version metadata)
+  operations: 4
+  operation_ids:
+  - getAPIVersions
+  - getProjectcalicoOrgAPIGroup
+  - getProjectcalicoOrgV3APIResources
+coverage:
+  mcp_tools_named: 0
+  mcp_tools_bound: 0
+  mcp_only: 0
+  rest_operations_total: 261
+  rest_operations_with_tool: 0
+  note: >-
+    mcp_tools_named is 0 because the tool list is auth-gated and Tigera publishes no tool
+    inventory anywhere public — not because the server has no tools. This is an unknown, not a
+    zero. rest_operations_with_tool is a true zero: the MCP server is on a different host and
+    fronts a different system.
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://www.tigera.io/wp-json/mcp/mcp-oauth-server
+    method: POST tools/list
+    status: 401
+  - url: https://docs.tigera.io/json/calico-api-swagger.json
+    status: 200

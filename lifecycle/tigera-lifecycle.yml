@@ -1,0 +1,87 @@
+generated: '2026-08-05'
+method: searched
+source: >-
+  https://docs.tigera.io/calico/latest/release-notes/,
+  https://docs.tigera.io/calico-cloud/release-notes/,
+  https://www.tigera.io/legal/calico-cloud-support-policy/,
+  https://docs.tigera.io/calico-cloud/get-help/support,
+  https://status.calicocloud.io/
+description: >-
+  Tigera runs three release trains with different lifecycle mechanics: Calico Open Source
+  (semver minor line, currently 3.32, documented per-version with a docs version switcher),
+  Calico Enterprise (its own 3.x line with versioned docs back to 3.20), and Calico Cloud (a
+  continuously deployed SaaS on a 22.x/23.x calendar-ish major line). The gap worth naming is
+  that Tigera publishes no formal deprecation or end-of-life policy — deprecations are announced
+  in release notes and marked in the docs, and the support policy covers response times only.
+versioning:
+  scheme: api-group-version-in-path (API) + semver (products)
+  api_current: projectcalico.org/v3
+  api_mechanism: >-
+    The Calico API is versioned as a Kubernetes API group. v3 is the only served version; the
+    spec still carries a handful of legacy libcalico-go v1 definitions (e.g. IPIPConfiguration).
+    Discovery endpoints (getAPIVersions, getProjectcalicoOrgAPIGroup,
+    getProjectcalicoOrgV3APIResources) let a client negotiate at runtime.
+  products:
+  - name: Calico Open Source
+    current: '3.32'
+    docs: https://docs.tigera.io/calico/latest/release-notes/
+    versioned_docs: 3.29, 3.30, 3.31, 3.32
+  - name: Calico Enterprise
+    docs: https://docs.tigera.io/calico-enterprise/latest/release-notes/
+    versioned_docs: 3.20-2, 3.21-2, 3.22-2, 3.23-2, 3.24-1
+  - name: Calico Cloud
+    current: 23.0.0
+    released: '2026-07-28'
+    docs: https://docs.tigera.io/calico-cloud/release-notes/
+    versioned_docs: 22-2, 23-2
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  mechanism: >-
+    Deprecations are announced in the per-release "Deprecations" section of the Calico Open
+    Source release notes and marked inline in the docs (Calico Cloud compliance reports are
+    currently labelled deprecated). No notice period, no removal timeline, and no RFC 8594
+    Sunset/Deprecation response headers.
+  evidence:
+  - url: https://www.tigera.io/legal/calico-cloud-support-policy/
+    status: 200
+    finding: >-
+      Defines severity-based response targets only (Critical 4 hours, Standard 16 hours,
+      8am-5pm Pacific Mon-Fri). No version-support window, no EOL timeline, no uptime target.
+  - url: https://docs.tigera.io/calico-cloud/reference/resources/compliance-reports/
+    status: 200
+    finding: Resource family published as "(deprecated)" with no stated removal date.
+  deprecated_operations: []
+  note: >-
+    No operation in the published Swagger 2.0 document carries `deprecated: true`.
+sla:
+  url: https://www.tigera.io/legal/calico-cloud-support-policy/
+  uptime_target: null
+  support_response:
+    critical: within 4 hours
+    standard: within 16 hours
+    hours: 8am-5pm Pacific Time, Monday-Friday, excluding public holidays
+    language: English
+  note: Tigera publishes no numeric availability/uptime commitment for Calico Cloud.
+status_page: https://status.calicocloud.io/
+support:
+  help_center: https://www.tigera.io/calico-support/
+  paid_portal: https://tigeraio.my.site.com/community/s/login/
+  free_trial: in-console "Contact Support" form
+  feedback: help@calicocloud.io
+  community: https://www.tigera.io/project-calico/community/
+release_cadence:
+  calico_cloud: >-
+    Roughly monthly through 2026 — 22.2.0 (Mar 5), 22.3.0 (Apr 7), 22.4.0 (May 19), 22.4.1
+    (Jun 9), 22.5.0 (Jun 22), 23.0.0 (Jul 28).
+  calico_open_source: Minor releases on a multi-month cadence with versioned documentation per minor.
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://status.calicocloud.io/
+    status: 200
+  - url: https://www.tigera.io/legal/calico-cloud-support-policy/
+    status: 200
+  - url: https://docs.tigera.io/calico-cloud/release-notes/
+    status: 200

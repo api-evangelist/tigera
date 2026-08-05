@@ -1,0 +1,55 @@
+generated: '2026-08-05'
+method: probed
+source: https://www.tigera.io/.well-known/oauth-authorization-server
+docs: null
+description: >-
+  Tigera's only public OAuth surface is the authorization server advertised on www.tigera.io for
+  its remote MCP server. It declares a single coarse scope, `mcp`. There is no published scope
+  or permission reference in the Tigera documentation, and no other Tigera or Calico Cloud host
+  publishes RFC 8414 or OIDC discovery metadata. The Calico API itself has no OAuth surface — it
+  is a Kubernetes aggregated API server and delegates authentication and authorization to the
+  cluster's own authenticators and RBAC.
+schemes:
+- name: TigeraMCPOAuth
+  type: oauth2
+  source: https://www.tigera.io/.well-known/oauth-authorization-server
+  issuer: https://www.tigera.io
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://www.tigera.io/oauth/authorize
+    tokenUrl: https://www.tigera.io/oauth/token
+    revocationUrl: https://www.tigera.io/oauth/revoke
+    pkce: required
+    code_challenge_methods: [S256]
+    refresh_tokens: true
+    client_authentication: none (public client)
+    dynamic_client_registration: >-
+      No RFC 7591 registration_endpoint. The server advertises
+      client_id_metadata_document_supported: true, so clients identify themselves with a
+      client-ID metadata document URL rather than pre-registering.
+scopes:
+- scope: mcp
+  description: >-
+    Access the Tigera MCP server at https://www.tigera.io/wp-json/mcp/mcp-oauth-server. Coarse,
+    single-scope model — the authorization server advertises no finer-grained read/write split.
+  flows: [authorizationCode]
+  sources: [https://www.tigera.io/.well-known/oauth-authorization-server]
+  protected_resource: https://www.tigera.io/wp-json/mcp/mcp-oauth-server
+not_applicable:
+- surface: Calico API (projectcalico.org/v3)
+  reason: >-
+    The published Swagger 2.0 definition declares no securityDefinitions. Authentication and
+    authorization are the host cluster's — bearer tokens, client certificates or kubeconfig
+    credentials, authorized by Kubernetes RBAC on projectcalico.org resources plus Calico's own
+    tier-scoped policy RBAC. There is no OAuth scope surface to record.
+- surface: Calico Cloud Usage API
+  reason: Organization-scoped read-only API keys, not OAuth. No scopes are published.
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://www.tigera.io/.well-known/oauth-authorization-server
+    status: 200
+  - url: https://www.tigera.io/.well-known/oauth-protected-resource
+    status: 200
+  - url: https://www.tigera.io/.well-known/openid-configuration
+    status: 404

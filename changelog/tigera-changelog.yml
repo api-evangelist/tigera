@@ -1,0 +1,57 @@
+generated: '2026-08-05'
+method: searched
+source: https://docs.tigera.io/calico-cloud/release-notes/
+description: >-
+  Dated release notes for Calico Cloud, the fastest-moving of Tigera's three trains. Each entry
+  is a version number with a release date and a feature list. Recent window only — the live
+  release notes are the source of truth. Calico Open Source and Calico Enterprise maintain
+  separate versioned release notes (linked below).
+scheme: semver
+current_version: 23.0.0
+current_released: '2026-07-28'
+changelog_urls:
+  calico_cloud: https://docs.tigera.io/calico-cloud/release-notes/
+  calico_open_source: https://docs.tigera.io/calico/latest/release-notes/
+  calico_enterprise: https://docs.tigera.io/calico-enterprise/latest/release-notes/
+entries:
+- version: 23.0.0
+  date: '2026-07-28'
+  breaking: []
+  additions:
+  - Programmatic access to usage data via read-only API keys (the Calico Cloud Usage API)
+  - Maglev — nodes act as a distributed, horizontally scalable load balancer
+  - Layer 2 reachability for pods without BGP, via a userspace ARP/NDP responder
+  - Kubernetes 1.36 support
+- version: 22.5.0
+  date: '2026-06-22'
+  breaking: []
+  additions:
+  - Security updates
+- version: 22.4.1
+  date: '2026-06-09'
+  breaking: []
+  additions:
+  - Kubernetes 1.35 support
+- version: 22.4.0
+  date: '2026-05-19'
+  breaking: []
+  additions:
+  - Audit logs for user activity and sign-ins
+  - Per-project vCPU hours breakdown on the Usage Metrics page
+- version: 22.3.0
+  date: '2026-04-07'
+  breaking: []
+  additions:
+  - Cluster connection notifications for administrators
+  - Alerts when managed clusters connect to or disconnect from Calico Cloud
+- version: 22.2.0
+  date: '2026-03-05'
+  breaking: []
+  additions:
+  - Istio Ambient Mode (tech preview) with sidecarless architecture
+  - zTunnel proxy preserves the original destination port
+  - Dashboard enhancements
+x-evidence:
+  fetched: '2026-08-05'
+  url: https://docs.tigera.io/calico-cloud/release-notes/
+  http_status: 200

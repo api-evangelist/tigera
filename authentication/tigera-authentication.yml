@@ -1,0 +1,105 @@
+generated: '2026-08-05'
+method: searched
+source: >-
+  https://docs.tigera.io/calico/latest/operations/install-apiserver,
+  https://docs.tigera.io/calico-cloud/operations/usage-api,
+  https://docs.tigera.io/calico-cloud/users/user-management,
+  https://www.tigera.io/.well-known/oauth-authorization-server
+docs: https://docs.tigera.io/calico-cloud/users/user-management
+description: >-
+  Tigera has four distinct authentication surfaces and none of them are declared in an OpenAPI
+  securityScheme — the published Swagger 2.0 definition for the Calico API carries no
+  securityDefinitions block at all, because the API is a Kubernetes aggregated API server that
+  inherits the host cluster's authenticators. This profile was written from the documentation
+  and from probed OAuth metadata, not derived from the spec.
+summary:
+  types: [http, apiKey, oauth2, openIdConnect, mutualTLS]
+  api_key_in: [header]
+  oauth2_flows: [authorizationCode]
+  derived_from_openapi: false
+  openapi_security_definitions: 0
+schemes:
+- name: KubernetesBearerToken
+  surface: Calico API (projectcalico.org/v3)
+  type: http
+  scheme: bearer
+  description: >-
+    The Calico aggregated API server sits behind the cluster's kube-apiserver, which performs
+    authentication. Callers present a Kubernetes ServiceAccount token or an OIDC ID token as
+    `Authorization: Bearer <token>`. Authorization is Kubernetes RBAC over
+    projectcalico.org/v3 resources, extended by Calico's tier-scoped policy RBAC (a
+    subject needs get on the tier plus the verb on the policy resource within that tier).
+  docs: https://docs.tigera.io/calico/latest/operations/install-apiserver
+  sources: [documentation]
+- name: KubernetesClientCertificate
+  surface: Calico API (projectcalico.org/v3)
+  type: mutualTLS
+  description: >-
+    Client-certificate authentication to the kube-apiserver, the default for kubeconfig
+    credentials created by kubeadm and most managed Kubernetes distributions. calicoctl and
+    kubectl both read these from kubeconfig.
+  docs: https://docs.tigera.io/calico/latest/operations/calicoctl/configure/kdd
+  sources: [documentation]
+- name: EtcdDatastoreCredentials
+  surface: Calico API — etcdv3 datastore mode
+  type: mutualTLS
+  description: >-
+    In etcdv3 datastore deployments calicoctl authenticates directly to etcd with
+    ETCD_CERT_FILE / ETCD_KEY_FILE / ETCD_CA_CERT_FILE, or with ETCD_USERNAME / ETCD_PASSWORD.
+  docs: https://docs.tigera.io/calico/latest/operations/calicoctl/configure/etcd
+  sources: [documentation]
+- name: CalicoCloudUsageApiKey
+  surface: Calico Cloud Usage API
+  type: apiKey
+  in: header
+  description: >-
+    Read-only, organization-scoped API keys generated in the Calico Cloud web console under
+    Settings > API Keys, with a chosen validity period. The key value is shown exactly once at
+    creation and cannot be retrieved afterwards. Creating one requires the Admin + Usage Metrics
+    roles or the Owner role. The console emits a ready-made command per key. Tigera does not
+    publish the header name in public documentation, so it is recorded as unknown rather than
+    guessed.
+  parameter_name: null
+  docs: https://docs.tigera.io/calico-cloud/operations/usage-api
+  sources: [documentation]
+- name: CalicoCloudConsoleSSO
+  surface: Calico Cloud web console
+  type: openIdConnect
+  description: >-
+    The Calico Cloud console authenticates users over OIDC (Auth0), with Google social login
+    among the supported options, mapped onto the predefined roles Owner, Admin, Security and
+    Viewer.
+  docs: https://docs.tigera.io/calico-cloud/users/user-management
+  sources: [documentation]
+- name: TigeraMCPOAuth
+  surface: Tigera MCP server
+  type: oauth2
+  description: >-
+    OAuth 2.1 authorization-code with PKCE (S256) for the remote MCP server on www.tigera.io.
+    Public clients (token_endpoint_auth_method none) identified by client-ID metadata document;
+    bearer token presented in the Authorization header; single scope `mcp`.
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://www.tigera.io/oauth/authorize
+    tokenUrl: https://www.tigera.io/oauth/token
+    scopes: [mcp]
+  detail: scopes/tigera-scopes.yml
+  sources: [https://www.tigera.io/.well-known/oauth-authorization-server]
+gaps:
+- >-
+  The published Calico Swagger 2.0 document declares no securityDefinitions and applies no
+  security to any of its 261 operations. A generated client or an agent reading only the spec
+  has no machine-readable signal about how to authenticate.
+- >-
+  The Calico Cloud Usage API's authentication header name and base URL are not published; both
+  are only visible inside the authenticated console.
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://docs.tigera.io/calico-cloud/operations/usage-api
+    status: 200
+  - url: https://www.tigera.io/.well-known/oauth-authorization-server
+    status: 200
+  - url: https://docs.tigera.io/json/calico-api-swagger.json
+    status: 200
+    finding: securityDefinitions absent

@@ -1,0 +1,58 @@
+generated: '2026-08-05'
+method: generated
+source: >-
+  Grounded in operationIds verified verbatim in
+  openapi/tigera-calico-api-openapi-original.json, plus the semantics captured in
+  conventions/tigera-conventions.yml and errors/tigera-problem-types.yml.
+description: >-
+  Packaged agent skills for the Calico API (projectcalico.org/v3). Each covers one marquee flow
+  and encodes the safety rules that this API's Kubernetes machinery makes available but that a
+  naive client will miss — dry-run before every write, resourceVersion preconditions on every
+  update, tier RBAC on every policy write, and never using collection-delete unattended. No
+  provider-published skills or AGENTS.md were found on any Tigera host, so these are generated.
+skills:
+- file: tigera-stage-and-promote-network-policy.md
+  name: Stage and promote a Calico network policy
+  api: openapi/tigera-calico-api-openapi-original.json
+  operations:
+  - listProjectcalicoOrgV3Tier
+  - readProjectcalicoOrgV3Tier
+  - createProjectcalicoOrgV3NamespacedStagedNetworkPolicy
+  - listProjectcalicoOrgV3NamespacedStagedNetworkPolicy
+  - deleteProjectcalicoOrgV3NamespacedStagedNetworkPolicy
+  - createProjectcalicoOrgV3NamespacedNetworkPolicy
+  - readProjectcalicoOrgV3NamespacedNetworkPolicy
+  - replaceProjectcalicoOrgV3NamespacedNetworkPolicy
+- file: tigera-audit-cluster-policy-posture.md
+  name: Audit a cluster's Calico policy posture
+  api: openapi/tigera-calico-api-openapi-original.json
+  read_only: true
+  operations:
+  - getProjectcalicoOrgV3APIResources
+  - listProjectcalicoOrgV3Tier
+  - listProjectcalicoOrgV3GlobalNetworkPolicy
+  - listProjectcalicoOrgV3NetworkPolicyForAllNamespaces
+  - listProjectcalicoOrgV3StagedGlobalNetworkPolicy
+  - listProjectcalicoOrgV3GlobalNetworkSet
+  - listProjectcalicoOrgV3NetworkSetForAllNamespaces
+  - listProjectcalicoOrgV3GlobalThreatFeed
+  - listProjectcalicoOrgV3HostEndpoint
+  - createProjectcalicoOrgV3AuthorizationReview
+- file: tigera-capture-and-troubleshoot-traffic.md
+  name: Capture pod traffic to troubleshoot a Calico policy
+  api: openapi/tigera-calico-api-openapi-original.json
+  operations:
+  - listProjectcalicoOrgV3PacketCaptureForAllNamespaces
+  - createProjectcalicoOrgV3NamespacedPacketCapture
+  - readProjectcalicoOrgV3NamespacedPacketCapture
+  - listProjectcalicoOrgV3NamespacedPacketCapture
+  - deleteProjectcalicoOrgV3NamespacedPacketCapture
+  - listProjectcalicoOrgV3NamespacedNetworkPolicy
+provider_published_skills:
+  found: false
+  probed:
+  - {url: 'https://www.tigera.io/AGENTS.md', status: 404}
+  - {url: 'https://docs.tigera.io/AGENTS.md', status: 404}
+x-evidence:
+  fetched: '2026-08-05'
+  operation_ids_verified_against: openapi/tigera-calico-api-openapi-original.json

@@ -1,0 +1,52 @@
+generated: '2026-08-05'
+method: searched
+probe: true
+source: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+description: >-
+  Tigera publishes a Calico Cloud trust center page on the marketing site rather than a
+  third-party trust portal (there is no trust.tigera.io — the host does not resolve). It names
+  the compliance frameworks Calico Cloud is assessed against and points at the Cloud Security
+  Alliance STAR registry entry for Tigera, Inc. Penetration-test reports are available to
+  customers on request rather than published.
+url: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+certifications:
+- name: CSA STAR
+  status: registered
+  evidence: https://cloudsecurityalliance.org/star/registry/tigera-inc
+- name: SOC 2
+  status: claimed
+  evidence: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+- name: PCI DSS
+  status: claimed
+  scope: payment processing system
+  evidence: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+- name: GDPR
+  status: claimed
+  evidence: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+- name: CCPA
+  status: claimed
+  evidence: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+practices:
+- Encryption of data in transit (end to end)
+- Encryption of customer information at rest
+- RBAC and token-based authentication
+- Annual third-party penetration testing; reports available to customers on request
+reports:
+  self_service_portal: false
+  request_required: true
+  note: >-
+    No automated NDA/report-request workflow (no Vanta/Drata/SafeBase-style portal). Reports are
+    obtained through the sales or support channel.
+vulnerability_disclosure: security/tigera-vulnerability-disclosure.yml
+probed:
+- url: https://trust.tigera.io/
+  status: 0
+  reason: dns-nxdomain
+- url: https://www.tigera.io/trust/
+  status: 404
+- url: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+  status: 200
+x-evidence:
+  fetched: '2026-08-05'
+  url: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+  http_status: 200

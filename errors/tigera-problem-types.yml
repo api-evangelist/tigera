@@ -1,0 +1,122 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/tigera-calico-api-openapi-original.json
+format: kubernetes-status
+description: >-
+  The Calico API does NOT use RFC 9457 problem+json. It uses the Kubernetes meta/v1.Status
+  envelope, which is the error contract for every projectcalico.org/v3 operation. Note a real
+  gap in the published contract: the Swagger 2.0 document declares only 200/201/202 responses
+  across all 261 operations — no 4xx or 5xx response is declared anywhere — so the error
+  contract below is derived from the Status/StatusDetails/StatusCause definitions that ARE in
+  the spec plus the Kubernetes API conventions the aggregated API server implements. Per-status
+  entries are recorded as the envelope shape, not as invented per-operation problem types.
+spec_gap:
+  declared_response_codes: ['200', '201', '202']
+  four_xx_declared: 0
+  five_xx_declared: 0
+  impact: >-
+    A generated client or an agent reading only the spec sees no failure modes. Adding 400/401/
+    403/404/409/422/429/500 responses referencing the existing v1.Status definition would close
+    this without any new schema work.
+envelope:
+  kind: Status
+  apiVersion: v1
+  schema: '#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Status'
+  content_type: application/json
+  fields:
+    status: Success or Failure.
+    code: Suggested HTTP return code for this status; 0 if not set.
+    reason: >-
+      Machine-readable description of why the operation failed. Clarifies the HTTP status code
+      but does not override it.
+    message: Human-readable description of the status of the operation.
+    details:
+      schema: '#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.StatusDetails'
+      fields:
+        group: API group of the resource associated with the failure.
+        kind: Kind of the resource associated with the failure.
+        name: Name of the single resource the failure refers to.
+        uid: UID of the resource the failure refers to.
+        retryAfterSeconds: >-
+          Seconds to wait before retrying, when the server can say. This is the retry signal an
+          agent should honour.
+        causes:
+          schema: '#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.StatusCause'
+          fields:
+            field: >-
+              JSON path of the offending field, with dot and zero-indexed array notation
+              (e.g. "spec.ingress[0].action").
+            reason: Machine-readable cause.
+            message: Human-readable cause, safe to show to a reader.
+problems:
+- status: 400
+  reason: BadRequest
+  title: The request could not be parsed or was structurally invalid.
+  envelope: v1.Status
+  remediation: Fix the request body or query parameters; check details.causes[].field.
+- status: 401
+  reason: Unauthorized
+  title: No credentials were presented, or the token was rejected by the cluster authenticator.
+  envelope: v1.Status
+  remediation: >-
+    Present a valid Kubernetes bearer token or client certificate. See
+    authentication/tigera-authentication.yml.
+- status: 403
+  reason: Forbidden
+  title: Authenticated, but Kubernetes RBAC (or Calico tier RBAC) denies the verb on the resource.
+  envelope: v1.Status
+  remediation: >-
+    Grant the verb on the projectcalico.org resource. For tiered policy the subject also needs
+    `get` on the Tier that contains the policy.
+- status: 404
+  reason: NotFound
+  title: The named resource, namespace, or API group/version does not exist.
+  envelope: v1.Status
+  remediation: >-
+    Confirm the resource name and namespace, and that the Calico API server is installed
+    (getProjectcalicoOrgV3APIResources should return the resource list).
+- status: 409
+  reason: Conflict / AlreadyExists
+  title: >-
+    Optimistic-concurrency failure — the supplied resourceVersion no longer matches — or a
+    create collided with an existing object of the same name.
+  envelope: v1.Status
+  remediation: >-
+    Re-read the object, re-apply the change against the new resourceVersion, and retry. This is
+    the core write-safety mechanism of the API; see conventions/tigera-conventions.yml.
+- status: 422
+  reason: Invalid
+  title: The object failed admission or validation (schema, selector syntax, tier ordering).
+  envelope: v1.Status
+  remediation: >-
+    Read details.causes[] — each entry names the offending field. Validate first with
+    `?dryRun=All` before committing the write.
+- status: 429
+  reason: TooManyRequests
+  title: The kube-apiserver applied priority-and-fairness throttling.
+  envelope: v1.Status
+  remediation: Honour details.retryAfterSeconds and back off.
+- status: 500
+  reason: InternalError
+  title: The Calico API server or its backing datastore failed to service the request.
+  envelope: v1.Status
+  remediation: Retry with backoff; check the calico-apiserver component logs.
+- status: 503
+  reason: ServiceUnavailable
+  title: >-
+    The aggregated API service is not reachable — typically the calico-apiserver deployment is
+    unavailable, so the APIService is marked unhealthy.
+  envelope: v1.Status
+  remediation: Check the APIService v3.projectcalico.org condition and the calico-apiserver pods.
+notes:
+- >-
+  Every operation that can return a bare Status (DELETE, deletecollection) already returns it as
+  a 200 in the spec, so the Status schema is reachable from the contract even though no failure
+  response references it.
+- >-
+  Calico Cloud webhook delivery and the Usage API are separate surfaces with no published error
+  reference.
+x-evidence:
+  fetched: '2026-08-05'
+  source_spec: https://docs.tigera.io/json/calico-api-swagger.json
+  http_status: 200

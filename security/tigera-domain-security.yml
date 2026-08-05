@@ -1,0 +1,68 @@
+generated: '2026-08-05'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+description: >-
+  TLS/HSTS posture per host and DNS security records per registrable domain. Both public domains
+  (tigera.io, calicocloud.io) publish SPF and a DMARC policy of p=reject; neither publishes DS
+  records, so DNSSEC is not signed. tigera.io publishes no CAA record; calicocloud.io does,
+  restricting issuance to Google Trust Services, DigiCert and Let's Encrypt. Every reachable
+  host negotiates TLS 1.3 with HSTS at one year or more, and status.calicocloud.io is
+  preload-eligible.
+hosts:
+- host: www.tigera.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 25 23:57:44 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: docs.tigera.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 24 17:43:43 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: www.calicocloud.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 19 10:38:31 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+- host: status.calicocloud.io
+  https: true
+  tls_version: TLSv1.3
+  hsts: true
+  hsts_max_age: 63113904
+  hsts_include_subdomains: true
+  hsts_preload: true
+- host: api.calicocloud.io
+  https: false
+  reason: dns-nxdomain
+  note: Probed as a candidate Calico Cloud API host; no DNS A record exists.
+not_probed:
+- host: kubernetes.default.svc
+  reason: >-
+    In-cluster Kubernetes service address for the Calico aggregated API server. Not a public
+    host — there is nothing on the internet to probe, and its TLS is the customer's own cluster
+    CA.
+- host: goldmane.calico-system.svc
+  reason: In-cluster service address for the Goldmane flows service; same as above.
+domains:
+- domain: tigera.io
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: calicocloud.io
+  dnssec: false
+  caa:
+  - 0 issue "pki.goog"
+  - 0 issue "digicert.com"
+  - 0 issue "letsencrypt.org"
+  spf: true
+  spf_record: v=spf1 include:_spf.google.com include:sendgrid.net ~all
+  dmarc: true
+  dmarc_policy: reject
+x-evidence:
+  fetched: '2026-08-05'

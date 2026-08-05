@@ -1,0 +1,152 @@
+generated: '2026-08-05'
+method: derived
+source: >-
+  openapi/tigera-calico-api-openapi-original.json,
+  https://www.tigera.io/.well-known/oauth-authorization-server,
+  https://www.tigera.io/tigera-products/calico-cloud-trust-center/,
+  https://docs.tigera.io/calico-cloud/networking/gateway-api
+description: >-
+  Cross-cutting standards conformance for Tigera's API surface. Two things stand out. First,
+  Calico's contract conforms deeply to the Kubernetes API conventions and Swagger 2.0 rather
+  than to any REST-over-HTTP convention family — no OpenAPI 3.x, no RFC 9457, no RFC 8594.
+  Second, the MCP server on www.tigera.io is a textbook implementation of the modern MCP
+  authorization stack: RFC 8414 authorization-server metadata, RFC 9728 protected-resource
+  metadata, and PKCE, all published anonymously.
+standards:
+- id: swagger-2.0
+  conforms: true
+  evidence: >-
+    Published document declares `swagger: "2.0"` with 124 paths, 261 operations and 171
+    definitions; served at https://docs.tigera.io/json/calico-api-swagger.json.
+- id: openapi-3
+  conforms: false
+  evidence: >-
+    Tigera publishes Swagger 2.0 only. No OpenAPI 3.0/3.1 document was found on any host.
+- id: kubernetes-api-conventions
+  conforms: true
+  evidence: >-
+    TypeMeta/ObjectMeta on every resource, list/watch with limit+continue, resourceVersion
+    optimistic concurrency, dryRun, server-side apply with fieldManager, meta/v1.Status errors,
+    x-kubernetes-group-version-kind extensions throughout the definitions.
+- id: kubernetes-server-side-apply
+  conforms: true
+  evidence: >-
+    31 PATCH operations accept application/apply-patch+yaml; `fieldManager` and `force`
+    parameters present.
+- id: json-patch-rfc6902
+  conforms: true
+  evidence: 31 PATCH operations declare consumes application/json-patch+json.
+- id: json-merge-patch-rfc7386
+  conforms: true
+  evidence: 31 PATCH operations declare consumes application/merge-patch+json.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors use the Kubernetes meta/v1.Status envelope, not application/problem+json. See
+    errors/tigera-problem-types.yml.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation response headers documented; no deprecation policy published.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on www.tigera.io and docs.tigera.io, despite an active
+    PSIRT programme at psirt@tigera.io.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog returns 404 on every host.
+- id: oauth2
+  conforms: true
+  scope: Tigera MCP server only
+  evidence: >-
+    OAuth 2.1 authorization-code with refresh tokens, advertised at
+    https://www.tigera.io/.well-known/oauth-authorization-server.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: true
+  evidence: 200 application/json at https://www.tigera.io/.well-known/oauth-authorization-server.
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: true
+  evidence: 200 application/json at https://www.tigera.io/.well-known/oauth-protected-resource.
+- id: rfc7636-pkce
+  conforms: true
+  evidence: 'code_challenge_methods_supported: [S256].'
+- id: oidc
+  conforms: partial
+  evidence: >-
+    The Calico Cloud console authenticates users over OIDC (Auth0) and Calico supports OIDC
+    tokens for cluster auth, but no /.well-known/openid-configuration is published on a Tigera
+    host — discovery lives on the identity provider.
+- id: model-context-protocol
+  conforms: true
+  evidence: >-
+    JSON-RPC 2.0 MCP endpoint at https://www.tigera.io/wp-json/mcp/mcp-oauth-server; anonymous
+    tools/list returns a structured 401 mcp_unauthorized rather than an HTML error.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json return 404 on tigera.io and
+    docs.tigera.io. The 200s on calicocloud.io hosts are SPA catch-all HTML and were rejected.
+- id: grpc-protobuf3
+  conforms: true
+  evidence: >-
+    goldmane/proto/api.proto declares syntax = "proto3" and defines the Flows service with
+    unary List, server-streaming Stream and FilterHints RPCs.
+- id: kubernetes-gateway-api
+  conforms: true
+  evidence: >-
+    Calico Ingress Gateway is a hardened Envoy Gateway build that implements the Kubernetes
+    Gateway API — https://docs.tigera.io/calico-cloud/networking/gateway-api.
+- id: kubernetes-network-policy
+  conforms: true
+  evidence: >-
+    Calico implements the upstream networking.k8s.io NetworkPolicy API and extends it with
+    projectcalico.org NetworkPolicy/GlobalNetworkPolicy.
+- id: cni-spec
+  conforms: true
+  evidence: Calico ships a CNI plugin implementing the Container Network Interface specification.
+- id: bgp-rfc4271
+  conforms: true
+  evidence: >-
+    BGPConfiguration/BGPPeer resources configure BGP peering (asNumber, peerIP, sourceAddress,
+    route reflectors) via an embedded BIRD-based BGP daemon.
+- id: soc2
+  conforms: claimed
+  evidence: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+- id: pci-dss
+  conforms: claimed
+  scope: payment processing system only
+  evidence: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+- id: gdpr
+  conforms: claimed
+  evidence: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+- id: ccpa
+  conforms: claimed
+  evidence: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+- id: csa-star
+  conforms: true
+  evidence: https://cloudsecurityalliance.org/star/registry/tigera-inc
+- id: iso-27001
+  conforms: false
+  evidence: Not named on the trust center page or anywhere else on the public site.
+- id: fedramp
+  conforms: false
+  evidence: Not named on any public Tigera page.
+- id: hipaa
+  conforms: unclear
+  evidence: >-
+    Tigera markets HIPAA compliance FOR customer workloads
+    (/lp/hipaa-compliance-for-host-vms-containers-and-kubernetes/) but does not claim a HIPAA
+    attestation for Calico Cloud itself on the trust center page. Recorded as unclear rather
+    than credited.
+compliance_program:
+  published: true
+  url: https://www.tigera.io/tigera-products/calico-cloud-trust-center/
+  detail: security/tigera-trust-center.yml
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - {url: 'https://docs.tigera.io/json/calico-api-swagger.json', status: 200}
+  - {url: 'https://www.tigera.io/.well-known/oauth-authorization-server', status: 200}
+  - {url: 'https://www.tigera.io/.well-known/security.txt', status: 404}
+  - {url: 'https://www.tigera.io/.well-known/agent-card.json', status: 404}
+  - {url: 'https://www.tigera.io/tigera-products/calico-cloud-trust-center/', status: 200}

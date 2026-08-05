@@ -1,0 +1,75 @@
+generated: '2026-08-05'
+method: searched
+source: >-
+  https://docs.tigera.io/calico-cloud/threat/configuring-webhooks,
+  https://docs.tigera.io/calico-cloud/reference/resources/securityeventwebhook
+spec_type: Webhooks
+description: >-
+  Tigera publishes NO AsyncAPI document. Its event surface is Calico Cloud's security-event
+  webhooks, configured either from the web console or declaratively through the
+  SecurityEventWebhook custom resource, which post security-event alerts to an external system.
+  Separately, the Calico API itself carries an in-cluster streaming change feed (Kubernetes
+  watch) and Goldmane exposes a server-streaming gRPC flow feed — both are documented in
+  conventions/ and grpc/ rather than here, because they are pull/stream surfaces rather than
+  provider-initiated callbacks.
+asyncapi:
+  published: false
+  probed:
+  - {url: 'https://docs.tigera.io/asyncapi.yaml', status: 404}
+  note: >-
+    No AsyncAPI document was found in the docs, the tigera or projectcalico GitHub orgs, or at
+    any conventional path. Not fabricated.
+webhooks:
+  direction: outbound (provider -> subscriber)
+  configuration_surfaces:
+  - name: Calico Cloud web console
+    docs: https://docs.tigera.io/calico-cloud/threat/configuring-webhooks
+    fields: [Name, Event types, Type, type-specific credentials]
+    testing: Actions > Test Webhook; a successful delivery returns 200 OK.
+  - name: SecurityEventWebhook custom resource
+    docs: https://docs.tigera.io/calico-cloud/reference/resources/securityeventwebhook
+    api_group: projectcalico.org
+    note: >-
+      Declarative form of the same configuration, for GitOps-managed clusters. Not present in
+      the published projectcalico.org/v3 Swagger document, which covers Calico Open Source
+      resources only.
+  consumers:
+  - name: Slack
+    credential: Slack app webhook URL
+  - name: Jira
+    credential: API token for an Atlassian user account
+  - name: Alertmanager
+    endpoint_shape: http://<alertmanager-service>.<namespace>.svc.cluster.local:9093/api/v2/alerts
+  - name: Generic JSON
+    detail: Any other application; posts JSON to a configured endpoint.
+  events:
+    catalog_published: false
+    note: >-
+      The console asks the operator to select "which Event types you want to get alerts for",
+      but Tigera does not publish the event-type names, the payload schema, the delivery headers,
+      a signing/verification scheme, or a retry policy. Those are only visible inside the
+      console. No event catalog is recorded here because none is published — inventing one would
+      be fabrication.
+  payload_schema:
+    published: false
+  signing:
+    published: false
+  retry_policy:
+    published: false
+related_streaming_surfaces:
+- name: Kubernetes watch on projectcalico.org/v3
+  kind: server-streaming HTTP
+  media_type: application/json;stream=watch
+  detail: conventions/tigera-conventions.yml
+  operations: 87 watch operations in the published Swagger document
+- name: Goldmane Flows.Stream
+  kind: server-streaming gRPC
+  detail: grpc/tigera-goldmane-api.proto
+gaps:
+- No AsyncAPI document for the webhook surface.
+- No published event-type catalog, payload schema, signature header or retry policy.
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - {url: 'https://docs.tigera.io/calico-cloud/threat/configuring-webhooks', status: 200}
+  - {url: 'https://docs.tigera.io/calico-cloud/reference/resources/securityeventwebhook', status: 200}

@@ -1,0 +1,128 @@
+generated: '2026-08-05'
+method: searched
+source: https://docs.tigera.io/calico/latest/reference/calicoctl/
+description: >-
+  calicoctl is Tigera's first-party command-line tool for Calico. It manages projectcalico.org
+  resources against either the Kubernetes API datastore or an etcdv3 datastore, and adds
+  Calico-specific operations that have no Kubernetes equivalent — IPAM inspection and repair,
+  node lifecycle, cluster diagnostics and datastore migration. It installs as a standalone
+  binary, as a container image, or as a kubectl plugin (`kubectl calico`). For clusters running
+  the aggregated API server, plain kubectl can manage most Calico resources directly and
+  calicoctl is only required for the IPAM/node/datastore commands.
+clis:
+- name: calicoctl
+  official: true
+  docs: https://docs.tigera.io/calico/latest/reference/calicoctl/overview
+  install_docs: https://docs.tigera.io/calico/latest/operations/calicoctl/install
+  configure_docs: https://docs.tigera.io/calico/latest/operations/calicoctl/configure/
+  source: https://github.com/projectcalico/calico
+  install_methods:
+  - method: binary
+    detail: Download the calicoctl binary for Linux, macOS or Windows and place it on PATH.
+  - method: container
+    detail: Run calicoctl from its published container image.
+  - method: kubectl-plugin
+    detail: >-
+      Install the binary as `kubectl-calico` on PATH so it is invoked as `kubectl calico <cmd>`.
+  configuration:
+    kubernetes_datastore:
+      docs: https://docs.tigera.io/calico/latest/operations/calicoctl/configure/kdd
+      credentials: kubeconfig, or DATASTORE_TYPE=kubernetes + KUBECONFIG
+    etcd_datastore:
+      docs: https://docs.tigera.io/calico/latest/operations/calicoctl/configure/etcd
+      credentials: >-
+        ETCD_ENDPOINTS with ETCD_CERT_FILE / ETCD_KEY_FILE / ETCD_CA_CERT_FILE, or
+        ETCD_USERNAME / ETCD_PASSWORD
+    methods: [config file, environment variables, kubeconfig]
+  commands:
+  - group: Resource management
+    commands:
+    - name: create
+      docs: https://docs.tigera.io/calico/latest/reference/calicoctl/create
+      summary: Create resources from a manifest file.
+    - name: apply
+      docs: https://docs.tigera.io/calico/latest/reference/calicoctl/apply
+      summary: Create or update resources from a manifest file.
+    - name: replace
+      docs: https://docs.tigera.io/calico/latest/reference/calicoctl/replace
+      summary: Replace an existing resource with one defined in a manifest.
+    - name: patch
+      docs: https://docs.tigera.io/calico/latest/reference/calicoctl/patch
+      summary: Apply a partial update to a resource.
+    - name: delete
+      docs: https://docs.tigera.io/calico/latest/reference/calicoctl/delete
+      summary: Remove resources by name or from a manifest file.
+    - name: get
+      docs: https://docs.tigera.io/calico/latest/reference/calicoctl/get
+      summary: List resources in plain, YAML, JSON or wide output.
+    - name: label
+      docs: https://docs.tigera.io/calico/latest/reference/calicoctl/label
+      summary: Add, update or remove labels on a resource.
+    - name: validate
+      docs: https://docs.tigera.io/calico/latest/reference/calicoctl/validate
+      summary: Validate a manifest without applying it.
+  - group: IP address management
+    commands:
+    - name: ipam show
+      summary: Show IP allocation and pool utilisation.
+    - name: ipam check
+      summary: Check IPAM allocations for inconsistencies.
+    - name: ipam release
+      summary: Release leaked or stale IP allocations.
+    - name: ipam configure
+      summary: Configure IPAM behaviour (e.g. strict affinity, auto-release).
+    - name: ipam split
+      summary: Split an IP pool into smaller pools.
+    docs: https://docs.tigera.io/calico/latest/reference/calicoctl/ipam
+  - group: Node operations
+    commands:
+    - name: node run
+      summary: Run the calico/node container on this host.
+    - name: node status
+      summary: Show BGP peer status and endpoint counts for this node.
+    - name: node checksystem
+      summary: Verify the host meets Calico's system requirements.
+    - name: node diags
+      summary: Collect node diagnostics.
+    docs: https://docs.tigera.io/calico/latest/reference/calicoctl/node
+  - group: Cluster and datastore
+    commands:
+    - name: cluster diags
+      summary: Collect a cluster-wide diagnostics bundle.
+    - name: datastore migrate export
+      summary: Export Calico data from an etcdv3 datastore.
+    - name: datastore migrate import
+      summary: Import Calico data into a Kubernetes datastore.
+    - name: datastore migrate lock
+      summary: Lock the datastore so Calico stops writing during a migration.
+    - name: datastore migrate unlock
+      summary: Unlock the datastore after a migration.
+    docs: https://docs.tigera.io/calico/latest/reference/calicoctl/cluster
+  - group: Meta
+    commands:
+    - name: version
+      summary: Print client and cluster versions.
+    docs: https://docs.tigera.io/calico/latest/reference/calicoctl/version
+  key_flows:
+  - name: Migrate etcdv3 to the Kubernetes datastore
+    steps: [datastore migrate lock, datastore migrate export, datastore migrate import, datastore migrate unlock]
+    docs: https://docs.tigera.io/calico/latest/operations/datastore-migration
+  - name: Reclaim leaked pod IPs
+    steps: [ipam check, ipam release]
+  - name: Decommission a node
+    steps: [delete node, ipam release]
+    docs: https://docs.tigera.io/calico/latest/operations/decommissioning-a-node
+- name: kubectl
+  official: false
+  third_party: true
+  detail: >-
+    Not a Tigera CLI, but the documented primary interface once the Calico aggregated API server
+    is installed — `kubectl get/apply` works directly against projectcalico.org/v3 resources.
+  docs: https://docs.tigera.io/calico/latest/operations/install-apiserver
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://docs.tigera.io/calico/latest/reference/calicoctl/
+    status: 200
+  - url: https://docs.tigera.io/calico/llms.txt
+    status: 200

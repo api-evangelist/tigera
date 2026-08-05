@@ -1,0 +1,103 @@
+generated: '2026-08-05'
+method: searched
+source: probed /.well-known/* on every Tigera host in apis.yml
+description: >-
+  Well-known discovery surface probed across the Tigera hosts. The notable find is on
+  www.tigera.io, which publishes BOTH RFC 8414 OAuth authorization-server metadata and RFC 9728
+  OAuth protected-resource metadata pointing at a remote MCP server at
+  https://www.tigera.io/wp-json/mcp/mcp-oauth-server. No security.txt (RFC 9116), no
+  api-catalog (RFC 9727), no OIDC discovery document and no A2A agent card were found on any
+  host.
+hosts:
+- host: https://www.tigera.io
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: tigera-oauth-authorization-server.json
+    note: RFC 8414 — issuer https://www.tigera.io, single scope `mcp`, PKCE S256, public clients.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: tigera-oauth-protected-resource.json
+    note: >-
+      RFC 9728 — resource https://www.tigera.io/wp-json/mcp/mcp-oauth-server, bearer in header.
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://docs.tigera.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://www.calicocloud.io
+  note: >-
+    Single-page-app catch-all. Every /.well-known/* path returns HTTP 200 with the same 1,593-byte
+    Angular index.html, so no 200 on this host is evidence of a published document. All rejected.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    accepted: false
+    reason: html-spa-catchall
+  - path: /.well-known/agent-card.json
+    status: 200
+    accepted: false
+    reason: html-spa-catchall
+  - path: /.well-known/openid-configuration
+    status: 200
+    accepted: false
+    reason: html-spa-catchall
+- host: https://status.calicocloud.io
+  note: Same SPA catch-all behaviour — every /.well-known/* path returns the 127KB status page HTML.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    accepted: false
+    reason: html-spa-catchall
+  - path: /.well-known/agent-card.json
+    status: 200
+    accepted: false
+    reason: html-spa-catchall
+- host: https://api.calicocloud.io
+  note: Host does not resolve (no DNS A record); every probe returned a connection failure.
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 0
+    reason: dns-nxdomain
+security_txt:
+  present: false
+  note: >-
+    Tigera runs a real vulnerability-disclosure programme (psirt@tigera.io, published policy and
+    security bulletins) but does not expose it as an RFC 9116 /.well-known/security.txt on any
+    host. See security/tigera-vulnerability-disclosure.yml.
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://www.tigera.io/.well-known/oauth-authorization-server
+    status: 200
+  - url: https://www.tigera.io/.well-known/oauth-protected-resource
+    status: 200
+  - url: https://www.tigera.io/.well-known/security.txt
+    status: 404
+  - url: https://docs.tigera.io/.well-known/security.txt
+    status: 404

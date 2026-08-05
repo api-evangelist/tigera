@@ -1,0 +1,90 @@
+generated: '2026-08-05'
+method: searched
+source: >-
+  pkg.go.dev, https://docs.tigera.io/calico-cloud/reference/api,
+  https://docs.tigera.io/calico/latest/reference/api, github.com/tigera, github.com/projectcalico
+description: >-
+  Tigera's client-library story is Go-only, which follows from the API being a Kubernetes
+  aggregated API server — the generated clientset, informers and listers are the idiomatic
+  client, and every other language reaches the API through the standard Kubernetes client for
+  that language rather than a Tigera-published SDK. npm `calico` and PyPI `calico` exist but are
+  unrelated third-party packages (a file-uppercasing utility and a CLI I/O checker
+  respectively) and are recorded here explicitly so a future run does not mistake them for
+  first-party SDKs.
+packages:
+- language: go
+  registry: pkg.go.dev
+  name: github.com/tigera/api
+  url: https://pkg.go.dev/github.com/tigera/api
+  install: go get github.com/tigera/api
+  official: true
+  repository: https://github.com/tigera/api
+  description: >-
+    The Tigera client library — generated Go clientset, listers and informers for the Calico
+    Enterprise / Calico Cloud API. Get, list, watch, create, update and delete Calico custom
+    resources the same way client-go does for native Kubernetes resources.
+  docs: https://docs.tigera.io/calico-cloud/reference/api
+- language: go
+  registry: pkg.go.dev
+  name: github.com/projectcalico/api
+  url: https://pkg.go.dev/github.com/projectcalico/api
+  install: go get github.com/projectcalico/api
+  official: true
+  repository: https://github.com/projectcalico/api
+  description: >-
+    The Calico Open Source client library — Go API types and generated clientset for the
+    projectcalico.org/v3 API group.
+  docs: https://docs.tigera.io/calico/latest/reference/api
+- language: go
+  registry: pkg.go.dev
+  name: github.com/projectcalico/calico
+  url: https://pkg.go.dev/github.com/projectcalico/calico
+  install: go get github.com/projectcalico/calico
+  official: true
+  repository: https://github.com/projectcalico/calico
+  description: >-
+    The Calico monorepo — libcalico-go, Felix, Typha, the CNI plugin, calicoctl, Goldmane and
+    the rest of the components. Imported directly by operators and integrators.
+binaries:
+- name: calicoctl
+  official: true
+  distribution: [github-release-binary, container-image, kubectl-plugin]
+  detail: cli/tigera-cli.yml
+  source: https://github.com/projectcalico/calico
+- name: tigera-operator
+  official: true
+  distribution: [container-image, helm-chart, manifest]
+  source: https://github.com/tigera/operator
+  description: The Kubernetes operator that installs and manages Calico and Calico Enterprise.
+not_first_party:
+- registry: npm
+  name: calico
+  url: https://www.npmjs.com/package/calico
+  status: 200
+  finding: 'Unrelated. Description: "Converts files to uppercase"; maintainer noambenami.'
+- registry: pypi
+  name: calico
+  url: https://pypi.org/project/calico/
+  status: 200
+  finding: 'Unrelated. "I/O checker for command line programs" by H. Turgut Uyar (itublg/calico).'
+probed_and_absent:
+- {registry: npm, name: tigera, status: 404}
+- {registry: npm, name: calicoctl, status: 404}
+- {registry: npm, name: '@tigera/api', status: 404}
+- {registry: pypi, name: tigera, status: 404}
+- {registry: pypi, name: pycalico, status: 404}
+notes:
+- >-
+  No Maven Central, NuGet, RubyGems, Packagist or crates.io first-party package was found.
+- >-
+  Non-Go consumers use their language's standard Kubernetes client (python kubernetes,
+  javascript @kubernetes/client-node, java io.kubernetes:client-java) against the
+  projectcalico.org/v3 custom-resource paths in openapi/.
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - {url: 'https://pkg.go.dev/github.com/tigera/api', status: 200}
+  - {url: 'https://pkg.go.dev/github.com/projectcalico/api', status: 200}
+  - {url: 'https://pkg.go.dev/github.com/projectcalico/calico', status: 200}
+  - {url: 'https://registry.npmjs.org/tigera', status: 404}
+  - {url: 'https://pypi.org/pypi/tigera/json', status: 404}

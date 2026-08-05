@@ -1,0 +1,207 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/tigera-calico-api-openapi-original.json
+description: >-
+  Entity-relationship graph of the projectcalico.org/v3 API, derived from the published Swagger
+  2.0 definitions. This is a Kubernetes data model, so the relationships are unusual: almost
+  nothing is joined by a foreign-key id. Objects are bound to each other by LABEL SELECTORS
+  (selector, namespaceSelector, nodeSelector, serviceAccountSelector, peerSelector) evaluated at
+  runtime, and identity is metadata.name plus, for namespaced kinds, metadata.namespace. Only
+  three relationships are name references: policy -> tier via spec.tier, BGPPeer -> node via
+  spec.node, and HostEndpoint -> node/profiles via spec.node and spec.profiles.
+identity:
+  primary_key: metadata.name
+  namespace_scoped_key: metadata.namespace + metadata.name
+  uid: metadata.uid (server-assigned)
+  concurrency: metadata.resourceVersion
+  id_prefixes: none — Calico does not use prefixed opaque ids.
+entities:
+- name: Tier
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.TierSpec
+  fields: [order]
+  description: Ordered container for policy. Evaluation order across tiers is set by spec.order.
+- name: NetworkPolicy
+  scope: namespaced
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.NetworkPolicySpec
+  fields: [tier, order, selector, serviceAccountSelector, types, ingress, egress]
+- name: GlobalNetworkPolicy
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.GlobalNetworkPolicySpec
+  fields: [tier, order, selector, namespaceSelector, serviceAccountSelector, types, ingress, egress, applyOnForward, doNotTrack, preDNAT]
+- name: StagedNetworkPolicy
+  scope: namespaced
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.StagedNetworkPolicySpec
+  fields: [stagedAction, tier, order, selector, types, ingress, egress]
+  description: Preview form of NetworkPolicy — evaluated for reporting but not enforced.
+- name: StagedGlobalNetworkPolicy
+  scope: cluster
+  description: Preview form of GlobalNetworkPolicy.
+- name: StagedKubernetesNetworkPolicy
+  scope: namespaced
+  description: Preview form of a native Kubernetes NetworkPolicy.
+- name: NetworkSet
+  scope: namespaced
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.NetworkSetSpec
+  fields: [nets, allowedEgressDomains]
+- name: GlobalNetworkSet
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.GlobalNetworkSetSpec
+  fields: [nets, allowedEgressDomains]
+- name: HostEndpoint
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.HostEndpointSpec
+  fields: [node, interfaceName, expectedIPs, ports, profiles]
+- name: Profile
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.ProfileSpec
+  fields: [labelsToApply, ingress, egress, egressGateway]
+- name: IPPool
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.IPPoolSpec
+  fields: [cidr, blockSize, ipipMode, vxlanMode, natOutgoing, nodeSelector, disabled]
+- name: BGPConfiguration
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.BGPConfigurationSpec
+- name: BGPPeer
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.BGPPeerSpec
+  fields: [node, nodeSelector, peerIP, peerSelector, asNumber, password, sourceAddress]
+- name: FelixConfiguration
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.FelixConfigurationSpec
+- name: KubeControllersConfiguration
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.KubeControllersConfigurationSpec
+- name: ClusterInformation
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.ClusterInformationSpec
+- name: LicenseKey
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.LicenseKeySpec
+- name: ManagedCluster
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.ManagedClusterSpec
+  fields: [installationManifest]
+- name: RemoteClusterConfiguration
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.RemoteClusterConfigurationSpec
+  fields: [datastoreType, clusterAccessSecret, k8sAPIEndpoint, etcdEndpoints, kubeconfig]
+- name: PacketCapture
+  scope: namespaced
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.PacketCaptureSpec
+  fields: [selector]
+- name: GlobalAlert
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.GlobalAlertSpec
+  fields: [dataSet, query, metric, field, aggregateBy, threshold, period, lookback, severity]
+- name: GlobalAlertTemplate
+  scope: cluster
+- name: GlobalThreatFeed
+  scope: cluster
+  schema: com.github.projectcalico.libcalico-go.lib.apis.v3.GlobalThreatFeedSpec
+  fields: [content, pull, globalNetworkSet]
+- name: GlobalReport
+  scope: cluster
+- name: GlobalReportType
+  scope: cluster
+- name: AuthenticationReview
+  scope: cluster
+  kind: review
+  description: Write-only review object — POST returns the authenticated identity in status.
+- name: AuthorizationReview
+  scope: cluster
+  kind: review
+  description: >-
+    Write-only review object — POST a set of resource attributes, get back the verbs the caller
+    is authorized for (AuthorizedResourceVerbs).
+relationships:
+- from: NetworkPolicy
+  to: Tier
+  type: belongs_to
+  via: spec.tier
+  cardinality: many_to_one
+  note: A policy without spec.tier lands in the implicit `default` tier.
+- from: GlobalNetworkPolicy
+  to: Tier
+  type: belongs_to
+  via: spec.tier
+  cardinality: many_to_one
+- from: StagedNetworkPolicy
+  to: Tier
+  type: belongs_to
+  via: spec.tier
+- from: StagedGlobalNetworkPolicy
+  to: Tier
+  type: belongs_to
+  via: spec.tier
+- from: BGPPeer
+  to: Node
+  type: belongs_to
+  via: spec.node
+  note: >-
+    Names a Kubernetes Node object, which lives in the core API group, not projectcalico.org/v3.
+- from: HostEndpoint
+  to: Node
+  type: belongs_to
+  via: spec.node
+- from: HostEndpoint
+  to: Profile
+  type: has_many
+  via: spec.profiles
+  cardinality: many_to_many
+  note: The only list-of-names reference in the model.
+- from: GlobalThreatFeed
+  to: GlobalNetworkSet
+  type: has_one
+  via: spec.globalNetworkSet
+  note: A pulled feed materialises its IPs into a GlobalNetworkSet that policy can then select.
+selector_bindings:
+- from: NetworkPolicy
+  to: WorkloadEndpoint
+  via: spec.selector
+  kind: label-selector
+- from: GlobalNetworkPolicy
+  to: Namespace
+  via: spec.namespaceSelector
+  kind: label-selector
+- from: NetworkPolicy
+  to: ServiceAccount
+  via: spec.serviceAccountSelector
+  kind: label-selector
+- from: IPPool
+  to: Node
+  via: spec.nodeSelector
+  kind: label-selector
+- from: BGPPeer
+  to: Node
+  via: spec.nodeSelector
+  kind: label-selector
+- from: BGPPeer
+  to: BGPPeer
+  via: spec.peerSelector
+  kind: label-selector
+- from: PacketCapture
+  to: WorkloadEndpoint
+  via: spec.selector
+  kind: label-selector
+- from: Profile
+  to: WorkloadEndpoint
+  via: spec.labelsToApply
+  kind: label-application
+  note: Inverted — the profile applies labels that other selectors then match.
+- from: NetworkPolicy rules
+  to: NetworkSet / GlobalNetworkSet
+  via: 'ingress[]/egress[].source|destination.selector'
+  kind: label-selector
+counts:
+  entities: 27
+  definitions_in_spec: 171
+  calico_definitions: 138
+  kubernetes_apimachinery_definitions: 33
+  named_reference_relationships: 8
+  selector_bindings: 9
+x-evidence:
+  fetched: '2026-08-05'
+  source_spec: https://docs.tigera.io/json/calico-api-swagger.json
+  http_status: 200
