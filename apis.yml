@@ -32,57 +32,17 @@ tags:
 - eBPF
 - Open Source
 apis:
-- aid: tigera:calico-api
-  name: Calico API (projectcalico.org/v3)
-  description: >-
-    The Calico aggregated Kubernetes API server. It serves the projectcalico.org/v3 API group —
-    27 resources covering network policy (NetworkPolicy, GlobalNetworkPolicy, tiers and their
-    staged variants), network sets, BGP configuration and peers, IP pools, host endpoints,
-    profiles, Felix and kube-controllers configuration, packet captures, global alerts, global
-    reports, global threat feeds, managed clusters, remote cluster configuration and license
-    keys. It follows Kubernetes API machinery conventions end to end: list/watch with
-    limit+continue cursors, resourceVersion optimistic concurrency, dryRun, server-side apply
-    with fieldManager, and the meta/v1.Status error envelope. Tigera publishes the full Swagger
-    2.0 definition (124 paths, 261 operations, 171 definitions) and renders it in the docs.
-  humanURL: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
-  baseURL: https://kubernetes.default.svc/apis/projectcalico.org/v3
-  tags:
-  - Kubernetes
-  - Network Policy
-  - Networking
-  - Security
-  properties:
-  - type: OpenAPI
-    url: openapi/tigera-calico-api-openapi-original.json
-  - type: Overlay
-    url: overlays/tigera-calico-api-overlay.yaml
-  - type: Documentation
-    url: https://docs.tigera.io/calico/latest/reference/
-  - type: APIReference
-    url: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
-  - type: ErrorCatalog
-    url: errors/tigera-problem-types.yml
-  - type: DataModel
-    url: data-model/tigera-data-model.yml
-  x-evidence:
-    spec_url: https://docs.tigera.io/json/calico-api-swagger.json
-    http_status: 200
-    fetched: '2026-08-05'
-    base_url_note: >-
-      The Calico API is an aggregated API server that runs inside the customer's own Kubernetes
-      cluster; there is no vendor-hosted host. kubernetes.default.svc is the canonical in-cluster
-      address of the Kubernetes API server that fronts it, and clients outside the cluster reach
-      it through their own kube-apiserver endpoint.
 - aid: tigera:goldmane-flows-api
   name: Goldmane Flows API
   description: >-
-    Goldmane is the Calico flow aggregation and network-observability service introduced in
-    Calico Open Source 3.30. It exposes a gRPC API for querying aggregated flow data — List for
-    point-in-time queries, Stream for a long-running stream of new flows, FilterHints for
-    progressive discovery of filter criteria such as namespaces and source/destination names —
-    plus statistics and flow-ingestion services. Tigera publishes the proto3 definition in the
-    projectcalico/calico repository and documents it on the company blog.
-  humanURL: https://www.tigera.io/blog/calico-open-source-3-30-exploring-the-goldmane-api-for-custom-kubernetes-network-observability/
+    Goldmane is the Calico flow aggregation and network-observability service introduced in Calico Open
+    Source 3.30. It exposes a gRPC API for querying aggregated flow data — List for point-in-time queries,
+    Stream for a long-running stream of new flows, FilterHints for progressive discovery of filter criteria
+    such as namespaces and source/destination names — plus statistics and flow-ingestion services. Tigera
+    publishes the proto3 definition in the projectcalico/calico repository and documents it on the company
+    blog.
+  humanURL: >-
+    https://www.tigera.io/blog/calico-open-source-3-30-exploring-the-goldmane-api-for-custom-kubernetes-network-observability/
   baseURL: https://goldmane.calico-system.svc:7443
   tags:
   - Observability
@@ -98,18 +58,18 @@ apis:
     http_status: 200
     fetched: '2026-08-05'
     base_url_note: >-
-      Goldmane runs in-cluster in the calico-system namespace; the address above is the
-      in-cluster service address for the component, not a vendor-hosted endpoint.
+      Goldmane runs in-cluster in the calico-system namespace; the address above is the in-cluster service
+      address for the component, not a vendor-hosted endpoint.
 - aid: tigera:tigera-mcp-server
   name: Tigera MCP Server
   description: >-
-    A remote Model Context Protocol server published on the tigera.io host, advertised through
-    RFC 8414 OAuth authorization-server metadata and RFC 9728 protected-resource metadata. The
-    server fronts the Tigera WordPress content estate (the marketing site, blog and resources),
-    not the Calico cluster API. Authorization is OAuth 2.1 authorization-code with PKCE (S256),
-    a single `mcp` scope, public clients (token_endpoint_auth_method none) and client-ID
-    metadata documents. tools/list is authenticated — an anonymous JSON-RPC call returns 401
-    mcp_unauthorized — so the live tool schemas require an authorized session.
+    A remote Model Context Protocol server published on the tigera.io host, advertised through RFC 8414
+    OAuth authorization-server metadata and RFC 9728 protected-resource metadata. The server fronts the
+    Tigera WordPress content estate (the marketing site, blog and resources), not the Calico cluster API.
+    Authorization is OAuth 2.1 authorization-code with PKCE (S256), a single `mcp` scope, public clients
+    (token_endpoint_auth_method none) and client-ID metadata documents. tools/list is authenticated —
+    an anonymous JSON-RPC call returns 401 mcp_unauthorized — so the live tool schemas require an authorized
+    session.
   humanURL: https://www.tigera.io/
   baseURL: https://www.tigera.io/wp-json/mcp/mcp-oauth-server
   tags:
@@ -132,13 +92,12 @@ apis:
 - aid: tigera:calico-cloud-usage-api
   name: Calico Cloud Usage API
   description: >-
-    A read-only REST API on the Calico Cloud SaaS management plane that returns the same vCPU
-    usage and managed-cluster data shown on the Usage Metrics page, for capacity planning,
-    FinOps and license-compliance workflows. Three documented datasets — contracts (start/end
-    dates, vCPU hours, package, add-ons), summary (per-project vCPU totals and usage over time)
-    and managed clusters (per-cluster usage rows, optional project filter, CSV output) — with
-    startTime, endTime and granularity query parameters. Authentication is an organization-scoped
-    read-only API key generated in the web console.
+    A read-only REST API on the Calico Cloud SaaS management plane that returns the same vCPU usage and
+    managed-cluster data shown on the Usage Metrics page, for capacity planning, FinOps and license-compliance
+    workflows. Three documented datasets — contracts (start/end dates, vCPU hours, package, add-ons),
+    summary (per-project vCPU totals and usage over time) and managed clusters (per-cluster usage rows,
+    optional project filter, CSV output) — with startTime, endTime and granularity query parameters. Authentication
+    is an organization-scoped read-only API key generated in the web console.
   humanURL: https://docs.tigera.io/calico-cloud/operations/usage-api
   tags:
   - FinOps
@@ -154,15 +113,90 @@ apis:
     http_status: 200
     fetched: '2026-08-05'
     base_url_note: >-
-      Tigera does not publish the Usage API host in public documentation. The console generates
-      a ready-made command per API key ("Actions > Generate commands"), so the base URL is only
-      visible to authenticated customers. Recorded without a baseURL rather than guessed.
+      Tigera does not publish the Usage API host in public documentation. The console generates a ready-made
+      command per API key ("Actions > Generate commands"), so the base URL is only visible to authenticated
+      customers. Recorded without a baseURL rather than guessed.
+- aid: tigera:tigera-apis-api
+  name: Tigera APIS API
+  description: The apis API from Tigera — 1 operation(s) for apis.
+  humanURL: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
+  baseURL: https://kubernetes.default.svc/apis/projectcalico.org/v3
+  tags:
+  - apis
+  properties:
+  - type: OpenAPI
+    url: openapi/tigera-apis-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tigera.io/calico/latest/reference/
+  - type: APIReference
+    url: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
+  - type: ErrorCatalog
+    url: errors/tigera-problem-types.yml
+  - type: DataModel
+    url: data-model/tigera-data-model.yml
+- aid: tigera:tigera-projectcalicoorg-api
+  name: Tigera Projectcalico Org API
+  description: The projectcalicoOrg API from Tigera — 1 operation(s) for projectcalicoorg.
+  humanURL: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
+  baseURL: https://kubernetes.default.svc/apis/projectcalico.org/v3
+  tags:
+  - projectcalicoOrg
+  properties:
+  - type: OpenAPI
+    url: openapi/tigera-projectcalicoorg-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tigera.io/calico/latest/reference/
+  - type: APIReference
+    url: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
+  - type: ErrorCatalog
+    url: errors/tigera-problem-types.yml
+  - type: DataModel
+    url: data-model/tigera-data-model.yml
+- aid: tigera:tigera-projectcalicoorg-v3-api
+  name: Tigera Projectcalico Org V3 API
+  description: The projectcalicoOrg_v3 API from Tigera — 121 operation(s) for projectcalicoorg_v3.
+  humanURL: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
+  baseURL: https://kubernetes.default.svc/apis/projectcalico.org/v3
+  tags:
+  - projectcalicoOrg_v3
+  properties:
+  - type: OpenAPI
+    url: openapi/tigera-projectcalicoorg-v3-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tigera.io/calico/latest/reference/
+  - type: APIReference
+    url: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
+  - type: ErrorCatalog
+    url: errors/tigera-problem-types.yml
+  - type: DataModel
+    url: data-model/tigera-data-model.yml
+- aid: tigera:tigera-version-api
+  name: Tigera Version API
+  description: The version API from Tigera — 1 operation(s) for version.
+  humanURL: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
+  baseURL: https://kubernetes.default.svc/apis/projectcalico.org/v3
+  tags:
+  - version
+  properties:
+  - type: OpenAPI
+    url: openapi/tigera-version-api-openapi.yml
+  - type: Documentation
+    url: https://docs.tigera.io/calico/latest/reference/
+  - type: APIReference
+    url: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
+  - type: ErrorCatalog
+    url: errors/tigera-problem-types.yml
+  - type: DataModel
+    url: data-model/tigera-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: License
+  name: Apache-2.0
+  url: https://github.com/projectcalico/calico/blob/master/LICENSE
 - type: Website
   url: https://www.tigera.io/
 - type: DeveloperPortal
