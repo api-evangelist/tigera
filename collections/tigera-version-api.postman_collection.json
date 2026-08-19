@@ -1,0 +1,104 @@
+{
+  "item": [
+    {
+      "id": "ef1433d2-be87-4ed0-b86b-10a3975c34d1",
+      "name": "version",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0df67705-d909-4a86-821f-b42d8c3598c8",
+          "name": "get Code Version",
+          "request": {
+            "name": "get Code Version",
+            "description": {
+              "content": "get the code version",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "version",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c7a382d5-1f7c-424a-b011-9d786b6429d3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "version",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"major\": \"string\",\n  \"minor\": \"string\",\n  \"gitVersion\": \"string\",\n  \"gitCommit\": \"string\",\n  \"gitTreeState\": \"string\",\n  \"buildDate\": \"string\",\n  \"goVersion\": \"string\",\n  \"compiler\": \"string\",\n  \"platform\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "aaf96d69-f223-4cac-bfe1-e320508eb822",
+    "name": "Generic API Server Version API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

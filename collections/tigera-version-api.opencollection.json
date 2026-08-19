@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Generic API Server Version API",
+    "version": "unversioned"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "version",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "getCodeVersion",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/version/"
+          },
+          "docs": "get the code version"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

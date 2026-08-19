@@ -2,20 +2,17 @@ generated: '2026-08-05'
 method: searched
 source: https://www.tigera.io/.well-known/oauth-protected-resource
 status: published
-description: >-
-  Tigera publishes a remote Model Context Protocol server on its primary marketing host. It was
-  not found in any MCP registry or in the Tigera documentation — it was discovered by probing
-  /.well-known/* on www.tigera.io, which returns both RFC 8414 authorization-server metadata and
-  RFC 9728 protected-resource metadata. The server fronts the Tigera WordPress content estate,
-  not the Calico cluster API.
+description: Tigera publishes a remote Model Context Protocol server on its primary marketing host. It
+  was not found in any MCP registry or in the Tigera documentation — it was discovered by probing /.well-known/*
+  on www.tigera.io, which returns both RFC 8414 authorization-server metadata and RFC 9728 protected-resource
+  metadata. The server fronts the Tigera WordPress content estate, not the Calico cluster API.
 server:
   name: tigera
   transport: http
   url: https://www.tigera.io/wp-json/mcp/mcp-oauth-server
   protocol: MCP over HTTP (JSON-RPC 2.0)
-  implementation: >-
-    WordPress REST namespace `mcp` on the Tigera site (WordPress + Elementor, hosted behind the
-    /wp-json/ route namespace). Route `mcp/mcp-oauth-server`.
+  implementation: WordPress REST namespace `mcp` on the Tigera site (WordPress + Elementor, hosted behind
+    the /wp-json/ route namespace). Route `mcp/mcp-oauth-server`.
 authorization:
   required: true
   model: OAuth 2.1 authorization code with PKCE
@@ -25,31 +22,35 @@ authorization:
   authorization_endpoint: https://www.tigera.io/oauth/authorize
   token_endpoint: https://www.tigera.io/oauth/token
   revocation_endpoint: https://www.tigera.io/oauth/revoke
-  grant_types_supported: [authorization_code, refresh_token]
-  response_types_supported: [code]
-  code_challenge_methods_supported: [S256]
-  token_endpoint_auth_methods_supported: [none]
+  grant_types_supported:
+  - authorization_code
+  - refresh_token
+  response_types_supported:
+  - code
+  code_challenge_methods_supported:
+  - S256
+  token_endpoint_auth_methods_supported:
+  - none
   client_id_metadata_document_supported: true
-  bearer_methods_supported: [header]
-  scopes_supported: [mcp]
+  bearer_methods_supported:
+  - header
+  scopes_supported:
+  - mcp
   detail: scopes/tigera-scopes.yml
 tools:
   discovered: false
-  discovery_method: >-
-    POST {"jsonrpc":"2.0","id":1,"method":"tools/list"} with
-    Accept: application/json, text/event-stream
+  discovery_method: 'POST {"jsonrpc":"2.0","id":1,"method":"tools/list"} with Accept: application/json,
+    text/event-stream'
   http_status: 401
   response: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
-  note: >-
-    The live tool list and per-tool inputSchema are auth-gated. Tigera publishes no tool
-    inventory in its documentation or in llms.txt, so NO tool list is recorded here — deriving
-    one would be fabrication. Authenticated introspection is required to enumerate the surface.
+  note: The live tool list and per-tool inputSchema are auth-gated. Tigera publishes no tool inventory
+    in its documentation or in llms.txt, so NO tool list is recorded here — deriving one would be fabrication.
+    Authenticated introspection is required to enumerate the surface.
 related_surfaces:
   openapi: openapi/tigera-calico-api-openapi-original.json
-  note: >-
-    The MCP server and the Calico API are disjoint surfaces. The MCP server exposes site/content
-    resources over the WordPress REST namespace; the Calico API is an in-cluster Kubernetes
-    aggregated API server. See mcp/tigera-tool-crosswalk.yml.
+  note: The MCP server and the Calico API are disjoint surfaces. The MCP server exposes site/content resources
+    over the WordPress REST namespace; the Calico API is an in-cluster Kubernetes aggregated API server.
+    See mcp/tigera-tool-crosswalk.yml.
 x-evidence:
   fetched: '2026-08-05'
   probes:
@@ -64,3 +65,10 @@ x-evidence:
     status: 401
   - url: https://www.tigera.io/wp-json/mcp/v1
     status: 404
+deployment:
+  mode: remote
+  endpoint: https://www.tigera.io/wp-json/mcp/mcp-oauth-server
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census

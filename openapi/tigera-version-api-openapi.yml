@@ -1,0 +1,54 @@
+openapi: 3.2.0
+info:
+  title: Generic API Server Version API
+  version: unversioned
+tags:
+- name: version
+paths:
+  /version/:
+    get:
+      description: get the code version
+      tags:
+      - version
+      operationId: getCodeVersion
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/io.k8s.apimachinery.pkg.version.Info'
+components:
+  schemas:
+    io.k8s.apimachinery.pkg.version.Info:
+      description: Info contains versioning information. how we'll want to distribute that information.
+      type: object
+      required:
+      - major
+      - minor
+      - gitVersion
+      - gitCommit
+      - gitTreeState
+      - buildDate
+      - goVersion
+      - compiler
+      - platform
+      properties:
+        buildDate:
+          type: string
+        compiler:
+          type: string
+        gitCommit:
+          type: string
+        gitTreeState:
+          type: string
+        gitVersion:
+          type: string
+        goVersion:
+          type: string
+        major:
+          type: string
+        minor:
+          type: string
+        platform:
+          type: string

@@ -1,0 +1,26 @@
+{
+  "provider": "tigera",
+  "sources": [
+    "tigera-apis-api-openapi.yml",
+    "tigera-projectcalicoorg-api-openapi.yml",
+    "tigera-projectcalicoorg-v3-api-openapi.yml",
+    "tigera-version-api-openapi.yml"
+  ],
+  "outputs": [
+    "tigera-apis-api-openapi.yml",
+    "tigera-projectcalicoorg-api-openapi.yml",
+    "tigera-projectcalicoorg-v3-api-openapi.yml",
+    "tigera-version-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "tigera-apis-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "tigera-projectcalicoorg-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "tigera-projectcalicoorg-v3-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "tigera-version-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

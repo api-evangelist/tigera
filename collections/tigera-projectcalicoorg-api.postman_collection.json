@@ -1,0 +1,106 @@
+{
+  "item": [
+    {
+      "id": "111cd134-b31c-43ac-a985-6610f92b8841",
+      "name": "projectcalicoOrg",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5560ef02-7cee-4fd2-b4e5-12a490200d14",
+          "name": "get Projectcalico Org API Group",
+          "request": {
+            "name": "get Projectcalico Org API Group",
+            "description": {
+              "content": "get information of a group",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "apis",
+                "projectcalico.org",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "26627155-0e24-4083-8009-13637210f75c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "apis",
+                    "projectcalico.org",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"versions\": [\n    {\n      \"groupVersion\": \"string\",\n      \"version\": \"string\"\n    },\n    {\n      \"groupVersion\": \"string\",\n      \"version\": \"string\"\n    }\n  ],\n  \"apiVersion\": \"string\",\n  \"kind\": \"string\",\n  \"preferredVersion\": {\n    \"groupVersion\": \"string\",\n    \"version\": \"string\"\n  },\n  \"serverAddressByClientCIDRs\": [\n    {\n      \"clientCIDR\": \"string\",\n      \"serverAddress\": \"string\"\n    },\n    {\n      \"clientCIDR\": \"string\",\n      \"serverAddress\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5e458101-bf30-42d9-aa80-bccb33d1c312",
+    "name": "Generic API Server Projectcalico Org API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

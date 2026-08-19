@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Generic API Server Projectcalico Org API",
+    "version": "unversioned"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "projectcalicoOrg",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "getProjectcalicoOrgAPIGroup",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/apis/projectcalico.org/"
+          },
+          "docs": "get information of a group"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
