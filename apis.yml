@@ -25,6 +25,18 @@ tags:
 - Networking
 - Network Security
 - Container Security
+- Cloud-Native
+- Observability
+- Microsegmentation
+- Zero Trust
+- eBPF
+- Open-Source
+tags_raw:
+- Company
+- Kubernetes
+- Networking
+- Network Security
+- Container Security
 - Cloud Native
 - Observability
 - Microsegmentation
@@ -102,6 +114,10 @@ apis:
   tags:
   - FinOps
   - Usage
+  - Software-as-a-Service
+  tags_raw:
+  - FinOps
+  - Usage
   - SaaS
   properties:
   - type: Documentation
@@ -121,7 +137,8 @@ apis:
   description: The apis API from Tigera — 1 operation(s) for apis.
   humanURL: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
   baseURL: https://kubernetes.default.svc/apis/projectcalico.org/v3
-  tags:
+  tags: []
+  tags_raw:
   - apis
   properties:
   - type: OpenAPI
@@ -139,7 +156,8 @@ apis:
   description: The projectcalicoOrg API from Tigera — 1 operation(s) for projectcalicoorg.
   humanURL: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
   baseURL: https://kubernetes.default.svc/apis/projectcalico.org/v3
-  tags:
+  tags: []
+  tags_raw:
   - projectcalicoOrg
   properties:
   - type: OpenAPI
@@ -176,6 +194,8 @@ apis:
   humanURL: https://docs.tigera.io/calico-cloud/reference/rest-api-reference
   baseURL: https://kubernetes.default.svc/apis/projectcalico.org/v3
   tags:
+  - Version
+  tags_raw:
   - version
   properties:
   - type: OpenAPI
