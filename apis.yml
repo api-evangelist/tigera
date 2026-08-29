@@ -12,6 +12,20 @@ description: >-
   the Goldmane gRPC service exposes aggregated flow observability, calicoctl and kubectl are the
   first-party CLIs, and Calico Cloud adds a SaaS management plane with a read-only Usage API and
   security-event webhooks.
+deliveryModel:
+  model: open-core
+  license: Apache-2.0
+  open_source: true
+  commercial: true
+  callable_host: false
+  label: Open core · an OSS project plus a commercial hosted product
+  confidence: high
+  source:
+  - license
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.tigera.io/app/uploads/2026/01/generic-Tigera-1200x628-1.png
 url: https://raw.githubusercontent.com/api-evangelist/tigera/refs/heads/main/apis.yml
 x-type: company
@@ -214,6 +228,14 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: IssueTracker
+  url: https://github.com/projectcalico/calico/issues
+- type: Releases
+  url: https://github.com/projectcalico/calico/releases
+- type: SecurityPolicy
+  url: https://github.com/projectcalico/calico/blob/master/SECURITY.md
+- type: ContributionGuide
+  url: https://github.com/projectcalico/calico/blob/master/CONTRIBUTING.md
 - type: License
   name: Apache-2.0
   url: https://github.com/projectcalico/calico/blob/master/LICENSE
