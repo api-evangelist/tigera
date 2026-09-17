@@ -217,17 +217,17 @@ apis:
     url: errors/tigera-problem-types.yml
   - type: DataModel
     url: data-model/tigera-data-model.yml
-- aid: tigera:tigera-ap-is-api
-  name: Tigera AP Is API
-  description: The AP Is API from Tigera — 1 operation(s) for ap is.
+- aid: tigera:tigera-apis-api
+  name: Tigera APIS API
+  description: The apis API from Tigera — 1 operation(s) for apis.
   humanURL: >-
     https://www.tigera.io/blog/calico-open-source-3-30-exploring-the-goldmane-api-for-custom-kubernetes-network-observability/
   baseURL: https://goldmane.calico-system.svc:7443
   tags:
-  - AP Is
+  - apis
   properties:
   - type: OpenAPI
-    url: openapi/tigera-ap-is-api-openapi.yml
+    url: openapi/tigera-apis-api-openapi.yml
   - type: Documentation
     url: https://docs.tigera.io/calico/latest/reference/
   - type: APIReference
