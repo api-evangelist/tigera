@@ -223,7 +223,8 @@ apis:
   humanURL: >-
     https://www.tigera.io/blog/calico-open-source-3-30-exploring-the-goldmane-api-for-custom-kubernetes-network-observability/
   baseURL: https://goldmane.calico-system.svc:7443
-  tags:
+  tags: []
+  tags_raw:
   - apis
   properties:
   - type: OpenAPI
