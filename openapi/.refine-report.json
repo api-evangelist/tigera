@@ -1,10 +1,7 @@
 {
   "provider": "tigera",
   "sources": [
-    "tigera-apis-api-openapi.yml",
-    "tigera-projectcalicoorg-api-openapi.yml",
-    "tigera-projectcalicoorg-v3-api-openapi.yml",
-    "tigera-version-api-openapi.yml"
+    "_original/tigera-calico-api-openapi-original.json"
   ],
   "outputs": [
     "tigera-apis-api-openapi.yml",
@@ -12,15 +9,25 @@
     "tigera-projectcalicoorg-v3-api-openapi.yml",
     "tigera-version-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
-    "tigera-apis-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
-    "tigera-projectcalicoorg-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
-    "tigera-projectcalicoorg-v3-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
-    "tigera-version-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "tigera-calico-api-openapi-original.json: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "tigera-calico-api-openapi-original.json: declared missing tag: apis",
+    "tigera-calico-api-openapi-original.json: declared missing tag: projectcalicoOrg",
+    "tigera-calico-api-openapi-original.json: declared missing tag: projectcalicoOrg_v3",
+    "tigera-calico-api-openapi-original.json: declared missing tag: version",
+    "superseded outputs removed: tigera-ap-is-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 7 total)"
   ],
-  "skipped": []
+  "skipped": [
+    "tigera-ap-is-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tigera-projectcalicoorg-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tigera-projectcalicoorg-v3-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tigera-version-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

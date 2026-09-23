@@ -3,13 +3,13 @@ info:
   title: Generic API Server Version API
   version: unversioned
 tags:
-- name: version
+- name: Version
 paths:
   /version/:
     get:
       description: get the code version
       tags:
-      - version
+      - Version
       operationId: getCodeVersion
       responses:
         '200':
@@ -18,6 +18,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/io.k8s.apimachinery.pkg.version.Info'
+      summary: Get code version
+      x-summary-source: derived
 components:
   schemas:
     io.k8s.apimachinery.pkg.version.Info:

@@ -3,13 +3,13 @@ info:
   title: Generic API Server APIS API
   version: unversioned
 tags:
-- name: apis
+- name: APIs
 paths:
   /apis/:
     get:
       description: get available API versions
       tags:
-      - apis
+      - APIs
       operationId: getAPIVersions
       responses:
         '200':
@@ -21,8 +21,36 @@ paths:
             application/yaml:
               schema:
                 $ref: '#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.APIGroupList'
+      summary: Get API versions
+      x-summary-source: derived
 components:
   schemas:
+    io.k8s.apimachinery.pkg.apis.meta.v1.ServerAddressByClientCIDR:
+      description: ServerAddressByClientCIDR helps the client to determine the server address that they should use, depending on the clientCIDR that they match.
+      type: object
+      required:
+      - clientCIDR
+      - serverAddress
+      properties:
+        clientCIDR:
+          description: The CIDR with which clients can match their IP to figure out the server address that they should use.
+          type: string
+        serverAddress:
+          description: Address of this server, suitable for a client that matches the above CIDR. This can be a hostname, hostname:port, IP or IP:port.
+          type: string
+    io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery:
+      description: GroupVersion contains the "group/version" and "version" string of a version. It is made a struct to keep extensibility.
+      type: object
+      required:
+      - groupVersion
+      - version
+      properties:
+        groupVersion:
+          description: groupVersion specifies the API group and version in the form "group/version"
+          type: string
+        version:
+          description: version specifies the version in the form of "version". This is to save the clients the trouble of splitting the GroupVersion.
+          type: string
     io.k8s.apimachinery.pkg.apis.meta.v1.APIGroupList:
       description: APIGroupList is a list of APIGroup, to allow clients to discover the API at /apis.
       type: object
@@ -77,29 +105,3 @@ components:
       - group: ''
         kind: APIGroup
         version: v1
-    io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery:
-      description: GroupVersion contains the "group/version" and "version" string of a version. It is made a struct to keep extensibility.
-      type: object
-      required:
-      - groupVersion
-      - version
-      properties:
-        groupVersion:
-          description: groupVersion specifies the API group and version in the form "group/version"
-          type: string
-        version:
-          description: version specifies the version in the form of "version". This is to save the clients the trouble of splitting the GroupVersion.
-          type: string
-    io.k8s.apimachinery.pkg.apis.meta.v1.ServerAddressByClientCIDR:
-      description: ServerAddressByClientCIDR helps the client to determine the server address that they should use, depending on the clientCIDR that they match.
-      type: object
-      required:
-      - clientCIDR
-      - serverAddress
-      properties:
-        clientCIDR:
-          description: The CIDR with which clients can match their IP to figure out the server address that they should use.
-          type: string
-        serverAddress:
-          description: Address of this server, suitable for a client that matches the above CIDR. This can be a hostname, hostname:port, IP or IP:port.
-          type: string
