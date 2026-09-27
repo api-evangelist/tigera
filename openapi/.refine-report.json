@@ -9,9 +9,7 @@
     "tigera-projectcalicoorg-v3-api-openapi.yml",
     "tigera-version-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -21,11 +19,10 @@
     "tigera-calico-api-openapi-original.json: declared missing tag: projectcalicoOrg",
     "tigera-calico-api-openapi-original.json: declared missing tag: projectcalicoOrg_v3",
     "tigera-calico-api-openapi-original.json: declared missing tag: version",
-    "superseded outputs removed: tigera-ap-is-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 7 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
-    "tigera-ap-is-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tigera-apis-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tigera-projectcalicoorg-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tigera-projectcalicoorg-v3-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tigera-version-api-openapi.yml: previously refined output, superseded by openapi/_original/"

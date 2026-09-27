@@ -58,7 +58,7 @@ tags:
 - Microsegmentation
 - Zero Trust
 - eBPF
-- Open-Source
+- Open Source
 tags_raw:
 - Company
 - Kubernetes
@@ -71,6 +71,7 @@ tags_raw:
 - Zero Trust
 - eBPF
 - Open Source
+- Open-Source
 apis:
 - aid: tigera:goldmane-flows-api
   name: Goldmane Flows API
@@ -129,6 +130,9 @@ apis:
     http_status: 200
     tools_list_status: 401
     fetched: '2026-08-05'
+  x-surface: platform-generated
+  x-platform: wordpress
+  x-platform-surface: mcp-plugin
 - aid: tigera:calico-cloud-usage-api
   name: Calico Cloud Usage API
   description: >-

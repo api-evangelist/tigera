@@ -25,19 +25,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    io.k8s.apimachinery.pkg.apis.meta.v1.ServerAddressByClientCIDR:
-      description: ServerAddressByClientCIDR helps the client to determine the server address that they should use, depending on the clientCIDR that they match.
-      type: object
-      required:
-      - clientCIDR
-      - serverAddress
-      properties:
-        clientCIDR:
-          description: The CIDR with which clients can match their IP to figure out the server address that they should use.
-          type: string
-        serverAddress:
-          description: Address of this server, suitable for a client that matches the above CIDR. This can be a hostname, hostname:port, IP or IP:port.
-          type: string
     io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery:
       description: GroupVersion contains the "group/version" and "version" string of a version. It is made a struct to keep extensibility.
       type: object
@@ -84,3 +71,16 @@ components:
       - group: ''
         kind: APIGroup
         version: v1
+    io.k8s.apimachinery.pkg.apis.meta.v1.ServerAddressByClientCIDR:
+      description: ServerAddressByClientCIDR helps the client to determine the server address that they should use, depending on the clientCIDR that they match.
+      type: object
+      required:
+      - clientCIDR
+      - serverAddress
+      properties:
+        clientCIDR:
+          description: The CIDR with which clients can match their IP to figure out the server address that they should use.
+          type: string
+        serverAddress:
+          description: Address of this server, suitable for a client that matches the above CIDR. This can be a hostname, hostname:port, IP or IP:port.
+          type: string
