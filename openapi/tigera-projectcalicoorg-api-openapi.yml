@@ -25,19 +25,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery:
-      description: GroupVersion contains the "group/version" and "version" string of a version. It is made a struct to keep extensibility.
-      type: object
-      required:
-      - groupVersion
-      - version
-      properties:
-        groupVersion:
-          description: groupVersion specifies the API group and version in the form "group/version"
-          type: string
-        version:
-          description: version specifies the version in the form of "version". This is to save the clients the trouble of splitting the GroupVersion.
-          type: string
     io.k8s.apimachinery.pkg.apis.meta.v1.APIGroup:
       description: APIGroup contains the name, the supported versions, and the preferred version of a group.
       type: object
@@ -83,4 +70,17 @@ components:
           type: string
         serverAddress:
           description: Address of this server, suitable for a client that matches the above CIDR. This can be a hostname, hostname:port, IP or IP:port.
+          type: string
+    io.k8s.apimachinery.pkg.apis.meta.v1.GroupVersionForDiscovery:
+      description: GroupVersion contains the "group/version" and "version" string of a version. It is made a struct to keep extensibility.
+      type: object
+      required:
+      - groupVersion
+      - version
+      properties:
+        groupVersion:
+          description: groupVersion specifies the API group and version in the form "group/version"
+          type: string
+        version:
+          description: version specifies the version in the form of "version". This is to save the clients the trouble of splitting the GroupVersion.
           type: string
